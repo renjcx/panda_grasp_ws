@@ -1,0 +1,30 @@
+● 我正在做一个 Panda 机械臂的 Pick & Place 仿真项目。
+  环境：Ubuntu 24.04 + ROS2 Jazzy + Gazebo Harmonic + MoveIt2 + Franka Panda
+  (fp3)
+
+  工作空间路径：~/panda_grasp_ws
+
+  昨天已经完成的内容：
+  1. 修复了 URDF 模型（robot_type=fp3，夹爪 ee_id=franka_hand，mimic 关节）
+  2. 修复了 Gazebo 资源路径（GZ_SIM_RESOURCE_PATH 加入本地 workspace）
+  3. 配置了 ros2_control + 控制器 YAML（fp3_arm_controller +
+  fp3_gripper_controller）
+  4. 写了 sim.launch.py（Gazebo + robot_state_publisher + gz_bridge + spawn +
+  controller_spawner）
+  5. Gazebo 中 Panda 3D 模型已经可以正常显示
+
+  启动命令：
+  source /opt/ros/jazzy/setup.bash
+  source ~/panda_grasp_ws/install/setup.bash
+  ros2 launch panda_grasp_sim sim.launch.py
+
+  文档路径：
+  ~/panda_grasp_ws/踩坑总结_Panda_Gazebo.md
+  ~/panda_grasp_ws/ROS2_Launch文件详解.md
+
+  今天要做的事：
+  1. 先验证 controller 是否加载成功（ros2 control list_controllers）
+  2. 验证能用手动命令控制关节运动
+  3. 集成 MoveIt2（生成配置包 → 运动规划）
+  4. 搭建 Pick & Place 场景（桌面 + 物体 + 相机）
+  5. 编写 Python Pick & Place 脚本

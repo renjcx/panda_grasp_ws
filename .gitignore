@@ -1,0 +1,30 @@
+# --- ROS 2 colcon workspace ---
+build/
+install/
+log/
+.colcon*
+.ros/
+
+# --- CMake / compile cache ---
+CMakeCache.txt
+CMakeFiles/
+cmake-build-*/
+compile_commands.json
+
+# --- Editors/IDE ---
+.vscode/
+.idea/
+*.code-workspace
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+
+# --- Misc ---
+*.swp
+*.swo
+.DS_Store

@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xacro src/panda_grasp_sim/urdf/panda.urdf.xacro)",
+      "Bash(colcon build *)",
+      "Bash(dpkg -l)",
+      "Bash(ros2 pkg *)",
+      "Bash(dmesg)",
+      "Bash(journalctl -n 50 --no-pager)",
+      "Bash(ldd /opt/ros/jazzy/lib/libgz_ros2_control-system.so)",
+      "Bash(nm -D /opt/ros/jazzy/lib/libgz_ros2_control-system.so)",
+      "Bash(apt-cache show *)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(ros2 run *)",
+      "Bash(awk '{print $2, $3}')",
+      "Read(//home/renjcx/**)",
+      "Read(//home/renjcx/.gz/**)",
+      "Bash(glxinfo -B)"
+    ]
+  }
+}

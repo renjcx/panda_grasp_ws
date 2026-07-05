@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="panda">
+
+    <!-- 1. 引用宏文件 -->
+    <xacro:include filename="$(find franka_description)/robots/common/franka_robot.xacro" />
+
+    <!-- 2. 加载 Panda (fp3) 的配置参数 -->
+    <xacro:property name="joint_limits" value="${xacro.load_yaml('$(find franka_description)/robots/fp3/joint_limits.yaml')}"/>
+    <xacro:property name="kinematics" value="${xacro.load_yaml('$(find franka_description)/robots/fp3/kinematics.yaml')}"/>
+    <xacro:property name="inertials" value="${xacro.load_yaml('$(find franka_description)/robots/fp3/inertials.yaml')}"/>
+    <xacro:property name="dynamics" value="${xacro.load_yaml('$(find franka_description)/robots/fp3/dynamics.yaml')}"/>
+
+    <!-- 3. 世界坐标系 -->
+    <link name="world" />
+
+    <!--
+        4. 生成 Panda 机械臂
+           connected_to="base" → franka_arm 自动创建 base link，
+           我们只需要把 world 固定到 base 即可
+    -->
+    <xacro:franka_robot
+        robot_type="fp3"
+        joint_limits="${joint_limits}"
+        kinematics="${kinematics}"
+        inertials="${inertials}"
+        dynamics="${dynamics}"
+        hand="true"
+        ee_id="franka_hand"
+        ros2_control="false" />
+
+    <joint name="world_fixed" type="fixed">
+        <parent link="world" />
+        <child link="base" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <!--
+        5. ros2_control 硬件接口配置
+           fp3_finger_joint2 是 mimic 关节，不应在此声明 command_interface
+    -->
+    <ros2_control name="PandaSimSystem" type="system">
+        <hardware>
+            <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+        </hardware>
+        <xacro:macro name="configure_arm_joint" params="joint_name initial_pos">
+            <joint name="${joint_name}">
+                <command_interface name="position"/>
+                <state_interface name="position">
+                    <param name="initial_value">${initial_pos}</param>
+                </state_interface>
+                <state_interface name="velocity">
+                    <param name="initial_value">0.0</param>
+                </state_interface>
+                <state_interface name="effort"/>
+            </joint>
+        </xacro:macro>
+
+        <xacro:configure_arm_joint joint_name="fp3_joint1" initial_pos="0.0" />
+        <xacro:configure_arm_joint joint_name="fp3_joint2" initial_pos="-0.785" />
+        <xacro:configure_arm_joint joint_name="fp3_joint3" initial_pos="0.0" />
+        <xacro:configure_arm_joint joint_name="fp3_joint4" initial_pos="-2.356" />
+        <xacro:configure_arm_joint joint_name="fp3_joint5" initial_pos="0.0" />
+        <xacro:configure_arm_joint joint_name="fp3_joint6" initial_pos="1.57" />
+        <xacro:configure_arm_joint joint_name="fp3_joint7" initial_pos="0.785" />
+
+        <joint name="fp3_finger_joint1">
+            <command_interface name="position" />
+            <state_interface name="position">
+                <param name="initial_value">0.04</param>
+            </state_interface>
+            <state_interface name="velocity">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="effort"/>
+        </joint>
+    </ros2_control>
+
+    <!-- 6. Gazebo 插件配置 -->
+    <gazebo>
+        <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+            <parameters>$(find panda_grasp_sim)/config/panda_controllers.yaml</parameters>
+            <controller_manager_node_name>controller_manager</controller_manager_node_name>
+        </plugin>
+    </gazebo>
+
+</robot>
