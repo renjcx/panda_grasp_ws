@@ -17,7 +17,26 @@
       "Bash(awk '{print $2, $3}')",
       "Read(//home/renjcx/**)",
       "Read(//home/renjcx/.gz/**)",
-      "Bash(glxinfo -B)"
+      "Bash(glxinfo -B)",
+      "Bash(apt list *)",
+      "Read(//opt/ros/jazzy/**)",
+      "Bash(python3 -c \"import sys; print\\('\\\\n'.join\\(sys.path\\)\\)\")",
+      "Bash(python3 -c \"import moveit; print\\(dir\\(moveit\\)\\)\")",
+      "Bash(python3 *)",
+      "Read(//opt/ros/**)",
+      "Read(//usr/**)",
+      "WebFetch(domain:robotics.stackexchange.com)",
+      "Bash(apt-cache showsrc *)",
+      "Bash(dpkg -L ros-jazzy-moveit-py)",
+      "Bash(apt-get source *)",
+      "Bash(tar xzf *)",
+      "Bash(tar tzf *)",
+      "Bash(pkill -9 -f \"gz sim\")",
+      "Bash(pkill -9 -f \"gz server\")",
+      "Bash(gz service *)",
+      "Bash(gz model *)",
+      "Bash(ros2 service *)",
+      "Bash(ros2 interface *)"
     ]
   }
 }

@@ -31,6 +31,11 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'pick_place = panda_grasp_sim.pick_place:main',
+            'hand_grasp_test = panda_grasp_sim.hand_grasp_test:main',
+            'hand_tf_test = panda_grasp_sim.hand_tf_test:main',
+            'cartesian_test = panda_grasp_sim.cartesian_test:main',
+            'pick_place_full = panda_grasp_sim.pick_place_full:main',
         ],
     },
 )

@@ -1,0 +1,20 @@
+digraph G {
+"fp3_hand" -> "fp3_leftfinger"[label=" Broadcaster: default_authority\nAverage rate: 19.88\nBuffer length: 4.98\nMost recent transform: 277.781\nOldest transform: 272.801\n"];
+"fp3_link8" -> "fp3_hand"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"fp3_hand" -> "fp3_rightfinger"[label=" Broadcaster: default_authority\nAverage rate: 19.88\nBuffer length: 4.98\nMost recent transform: 277.781\nOldest transform: 272.801\n"];
+"fp3_link0" -> "fp3_link1"[label=" Broadcaster: default_authority\nAverage rate: 19.88\nBuffer length: 4.98\nMost recent transform: 277.781\nOldest transform: 272.801\n"];
+"base" -> "fp3_link0"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"fp3_link1" -> "fp3_link2"[label=" Broadcaster: default_authority\nAverage rate: 19.88\nBuffer length: 4.98\nMost recent transform: 277.781\nOldest transform: 272.801\n"];
+"fp3_link2" -> "fp3_link3"[label=" Broadcaster: default_authority\nAverage rate: 19.88\nBuffer length: 4.98\nMost recent transform: 277.781\nOldest transform: 272.801\n"];
+"fp3_link3" -> "fp3_link4"[label=" Broadcaster: default_authority\nAverage rate: 19.88\nBuffer length: 4.98\nMost recent transform: 277.781\nOldest transform: 272.801\n"];
+"fp3_link4" -> "fp3_link5"[label=" Broadcaster: default_authority\nAverage rate: 19.88\nBuffer length: 4.98\nMost recent transform: 277.781\nOldest transform: 272.801\n"];
+"fp3_link5" -> "fp3_link6"[label=" Broadcaster: default_authority\nAverage rate: 19.88\nBuffer length: 4.98\nMost recent transform: 277.781\nOldest transform: 272.801\n"];
+"fp3_link6" -> "fp3_link7"[label=" Broadcaster: default_authority\nAverage rate: 19.88\nBuffer length: 4.98\nMost recent transform: 277.781\nOldest transform: 272.801\n"];
+"world" -> "base"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"fp3_link7" -> "fp3_link8"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"fp3_hand" -> "fp3_hand_tcp"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1783386648.6374145"[ shape=plaintext ] ;
+}->"world";
+}

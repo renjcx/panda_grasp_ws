@@ -13,11 +13,7 @@
     <!-- 3. 世界坐标系 -->
     <link name="world" />
 
-    <!--
-        4. 生成 Panda 机械臂
-           connected_to="base" → franka_arm 自动创建 base link，
-           我们只需要把 world 固定到 base 即可
-    -->
+    <!--4. 生成 Panda 机械臂connected_to="base" → franka_arm 自动创建 base link，把 world 固定到 base -->
     <xacro:franka_robot
         robot_type="fp3"
         joint_limits="${joint_limits}"

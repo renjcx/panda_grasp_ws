@@ -28,3 +28,22 @@
   3. 集成 MoveIt2（生成配置包 → 运动规划）
   4. 搭建 Pick & Place 场景（桌面 + 物体 + 相机）
   5. 编写 Python Pick & Place 脚本
+
+  1. 验证controller是否加载成功
+      启动仿真：source ~/panda_grasp_ws/install/setup.bash
+              ros2 launch panda_grasp_sim sim.launch.py
+      检查控制状态：source install/setup.bash
+                  ros2 control list_controllers
+                  可以看到三个控制器都是active 状态
+      检查topic：ros2 topic | grep controller
+  2.验证能手动控制关节运动：
+    手指开合0.04m
+    ros2 action send_goal /fp3_gripper_controller/follow_joint_trajectory control_msgs/action/FollowJointTrajectory 
+    "{ trajectory: { joint_names: ['fp3_finger_joint1'], points: [ { positions: [0.04], time_from_start: { sec: 0, nanosec: 0 } }, { positions: [0.0], time_from_start: { sec: 1, nanosec: 0 } } ] } }"
+    机械臂运动：
+    ros2 action send_goal /fp3_arm_controller/follow_joint_trajectory control_msgs/action/FollowJointTrajectory 
+    "{ trajectory: { joint_names: ['fp3_joint1','fp3_joint2','fp3_joint3','fp3_joint4','fp3_joint5','fp3_joint6','fp3_joint7'], points: [ { positions: [0.0, -0.785, 0.0, -2.356, 0.0, 1.57, 0.785], time_from_start: { sec: 0, nanosec: 0 } }, { positions: [0.5, -0.3, 0.2, -2.0, 0.3, 1.2, 0.5], time_from_start: {sec: 3, nanosec: 0 } } ] } }"
+  3.集成moveit
+    运行moveit_setup_assistant:/opt/ros/jazzy/lib/moveit_setup_assistant/moveit_setup_assistant
+    
+

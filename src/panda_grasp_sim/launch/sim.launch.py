@@ -28,7 +28,7 @@ def generate_launch_description():
     gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')]),
-        launch_arguments={'gz_args': '-r empty.sdf'}.items(),
+        launch_arguments={'gz_args': '-r ' + os.path.join(pkg_share, 'worlds', 'grasp_world.sdf')}.items(),
     )
 
     # 3. Robot State Publisher
@@ -58,7 +58,7 @@ def generate_launch_description():
         arguments=['-topic', 'robot_description',
                    '-name', 'panda',
                    '-allow_renaming', 'true',
-                   '-z', '0.0'],
+                   '-z', '0.1'],
     )
 
     # 6. Controller spawner — 等待 controller_manager 就绪后加载所有控制器
