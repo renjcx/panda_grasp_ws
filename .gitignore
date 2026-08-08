@@ -28,3 +28,13 @@ __pycache__/
 *.swp
 *.swo
 .DS_Store
+*~
+
+# --- Claude / internal dev ---
+.claude/
+claude.txt
+MoveItPy_API.txt
+
+# --- Generated artifacts at root ---
+/panda.urdf
+/frames_*

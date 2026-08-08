@@ -22,8 +22,8 @@ setup(
     zip_safe=True,
     maintainer='renjcx',
     maintainer_email='renjcx3128@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='Franka Panda (fp3) pick-and-place simulation with Gazebo Harmonic + MoveIt2',
+    license='Apache License 2.0',
     extras_require={
         'test': [
             'pytest',
