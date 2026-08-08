@@ -3,8 +3,6 @@
 基于 **ROS 2 Jazzy + Gazebo Harmonic + MoveIt 2** 的 Franka Panda (fp3) 机械臂 Pick & Place 仿真系统。
 支持笛卡尔空间运动规划、完整抓取流水线和 RViz 交互式运动规划面板。
 
-> 🎯 作为面试作品集项目，展示 ROS 2、机器人仿真、运动规划和系统集成能力。
-
 ---
 
 ## 目录
