@@ -96,8 +96,12 @@ Node(
 Node(
     package='ros_gz_sim',
     executable='create',
-    arguments=['-topic', 'robot_description', '-name', 'panda'],
+    arguments=['-topic', 'robot_description',
+               '-name', 'panda',
+               '-allow_renaming', 'true',
+               '-z', '0.1'],
 )
+# -z 0.1：把 spawn 高度抬升 0.1m，让机器人正好落在桌面上
 # 从 /robot_description 话题读取 URDF
 # 转换成 SDF 格式发给 Gazebo
 # Gazebo 创建 3D 实体（包括物理碰撞 + 视觉效果）
@@ -106,8 +110,13 @@ Node(
 Node(
     package='controller_manager',
     executable='spawner',
-    arguments=['joint_state_broadcaster', 'fp3_arm_controller', 'fp3_gripper_controller'],
+    arguments=['joint_state_broadcaster', 'fp3_arm_controller', 'fp3_gripper_controller',
+               '--controller-manager-timeout', '120',
+               '--activate-as-group'],
 )
+# --controller-manager-timeout 120：controller_manager 是 Gazebo 插件内部启动的，
+#   机器人 spawn 前它还不存在，超时要给足
+# --activate-as-group：3 个控制器作为一个组同时激活，避免部分激活的不一致
 # 等 controller_manager 服务就绪后，加载 3 个控制器：
 #   joint_state_broadcaster  → 读取并发布所有关节状态到 /joint_states
 #   fp3_arm_controller       → 接收轨迹命令，控制 7 个机械臂关节
@@ -120,6 +129,8 @@ delayed_controller_spawner = TimerAction(period=6.0, actions=[controller_spawner
 #   T+0s:  Gazebo 刚启动，还没初始化完
 #   T+3s:  Gazebo 就绪了，才能 spawn 机器人
 #   T+6s:  机器人 spawn 后 controller_manager 才存在，才能加载控制器
+
+> 这个时序问题的踩坑记录见 [`gazebo_troubleshooting.md`](gazebo_troubleshooting.md) 坑 6。
 
 
 ================================================================

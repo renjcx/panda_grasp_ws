@@ -119,6 +119,8 @@ constraints, so no constraint will be created.
 4. `panda.srdf` 声明 `<mimic_joint joint="fp3_finger_joint2" mimic_joint="fp3_finger_joint1"/>`，MoveIt 保持 1-DOF 规划并自动展开轨迹
 5. 抓取脚本的轨迹同时包含两个手指关节（相同目标值）
 
+> 完整排查过程与实测数据见 [`夹爪单指运动问题修复记录.md`](夹爪单指运动问题修复记录.md)。
+
 ### 坑 6：Launch 启动时序
 
 **现象**：Controller spawner 找不到 `/controller_manager` 服务。
@@ -132,6 +134,7 @@ T+3s:  等待 Gazebo 就绪 → spawn 机器人
 T+6s:  等待 controller_manager 就绪 → 加载控制器
 ```
 
+> launch 时序的逐段讲解见 [`launch_file_guide.md`](launch_file_guide.md)。
 
 ## 三、架构速览 — 关键概念
 
