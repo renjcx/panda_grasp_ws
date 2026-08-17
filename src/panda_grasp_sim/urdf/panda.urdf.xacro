@@ -32,7 +32,9 @@
 
     <!--
         5. ros2_control 硬件接口配置
-           fp3_finger_joint2 是 mimic 关节，不应在此声明 command_interface
+           注意：两个手指关节都声明 command_interface，由控制器同步驱动。
+           Gazebo Harmonic 不执行 URDF mimic 约束（见 docs/gazebo_troubleshooting.md 坑 5），
+           MoveIt 侧通过在 panda.srdf 中声明 mimic_joint 保持 1-DOF 规划语义。
     -->
     <ros2_control name="PandaSimSystem" type="system">
         <hardware>
@@ -60,6 +62,17 @@
         <xacro:configure_arm_joint joint_name="fp3_joint7" initial_pos="0.785" />
 
         <joint name="fp3_finger_joint1">
+            <command_interface name="position" />
+            <state_interface name="position">
+                <param name="initial_value">0.04</param>
+            </state_interface>
+            <state_interface name="velocity">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="effort"/>
+        </joint>
+
+        <joint name="fp3_finger_joint2">
             <command_interface name="position" />
             <state_interface name="position">
                 <param name="initial_value">0.04</param>

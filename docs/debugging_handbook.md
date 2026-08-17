@@ -33,7 +33,7 @@ topic 数量应该 > 15，如果只有个位数，说明仿真没起来。
 | 现象 | 原因 | 查什么 |
 |------|------|--------|
 | Gazebo 窗口空白没有模型 | 模型没 spawn 或 URDF 路径错误 | `cat ~/.gz/sim/log/*/server_console.log \| tail -20` |
-| 模型出现但关节全塌 | mimic 关节或惯性参数异常 | URDF 中 finger_joint2 的 mimic 配置 |
+| 模型出现但关节全塌 | 惯性参数异常 | 检查 URDF 惯量配置 |
 | move_group 没起来 | CMake 编译错误或 use_sim_time 没设 | 看终端红色 ERROR |
 
 ---
@@ -68,7 +68,7 @@ state interfaces
 |------|------|------|
 | `[available] [claimed]` | 正常，被控制器占用 | ✅ |
 | `[available] [unclaimed]` | 硬件接口在线但没控制器使用它 | ⚠️ 检查 step 2 |
-| `fp3_finger_joint2` 出现在 command_interface 里 | 配置错误！mimic 关节不应有 command | 检查 URDF 和 YAML |
+| `fp3_finger_joint2` 不在 command_interface 里 | 配置错误！两个手指都必须有 command（Gazebo 不执行 URDF mimic） | 检查 URDF 和 YAML |
 | 关节数量不对 | URDF ros2_control 段有问题 | 检查 xacro 展开结果 |
 
 ---

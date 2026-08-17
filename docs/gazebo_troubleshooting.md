@@ -99,21 +99,25 @@ controller_manager, joint_state_broadcaster,
 joint_trajectory_controller, xacro, franka_description
 ```
 
-### 坑 5：ros2_control 关节配置中的 mimic 关节
+### 坑 5：Gazebo Harmonic 不执行 URDF mimic 约束（夹爪只动一边）
 
-**现象**：如果给 mimic 关节（fingers）也配置 command_interface，Gazebo 会报错崩溃。
+**现象**：只命令 `fp3_finger_joint1` 时，Gazebo 里只有一个手指动；服务器日志报错：
 
-**原因**：`fp3_finger_joint2` 声明了 `<mimic joint="fp3_finger_joint1"/>`，它的位置由 `finger_joint1` 驱动。在 `ros2_control` 中给它加 `command_interface` 会导致冲突。
-
-**教训**：
-```xml
-<!-- 正确做法：只给主动关节配置 -->
-<joint name="fp3_finger_joint1">
-    <command_interface name="position" />
-    ...
-</joint>
-<!-- fp3_finger_joint2 不写！ -->
 ```
+[Err] [Physics.cc:1808] Attempting to create a mimic constraint for joint
+[fp3_finger_joint2] but the chosen physics engine does not support mimic
+constraints, so no constraint will be created.
+```
+
+**原因**：URDF 的 `<mimic>` 声明转换进 SDF 后，gz-sim 尝试创建物理约束，但当前软件栈（Jazzy + Gazebo Harmonic vendor 包）下没有物理引擎能通过该检查——这是已知上游问题 [`gazebosim/gz-sim#1684`](https://github.com/gazebosim/gz-sim/issues/1684)，gz_ros2_control 的 workaround PR（[ros-controls/gz_ros2_control#86](https://github.com/ros-controls/gz_ros2_control/pull/86)）从未合并。所以 `finger_joint2` 是一个没有任何约束和命令的自由关节。
+
+**教训 / 解决方案**：不要依赖物理层 mimic，让控制器同步驱动两个手指：
+
+1. URDF 删除 `finger_joint2` 的 `<mimic>` 标签（`franka_hand.xacro`）
+2. `panda.urdf.xacro` 给 `fp3_finger_joint2` 也配置 `command_interface`
+3. `panda_controllers.yaml`：broadcaster 和 `fp3_gripper_controller` 都加入 `fp3_finger_joint2`
+4. `panda.srdf` 声明 `<mimic_joint joint="fp3_finger_joint2" mimic_joint="fp3_finger_joint1"/>`，MoveIt 保持 1-DOF 规划并自动展开轨迹
+5. 抓取脚本的轨迹同时包含两个手指关节（相同目标值）
 
 ### 坑 6：Launch 启动时序
 
@@ -177,5 +181,5 @@ Gazebo 出问题时，按这个顺序查：
 1. **Gazebo 直接崩溃** → `cat ~/.gz/sim/log/<latest>/server_console.log` 看最后几行错误
 2. **模型不显示（白屏/透明）** → 看 log 里有没有 `Unable to find file [model://...]`
 3. **关节不动** → 检查 `/controller_manager/list_controllers` 是否返回了控制器
-4. **夹爪同步问题** → confirm 用的是 `bullet-featherstone` 物理引擎（DART 不支持 mimic joint）
+4. **夹爪同步问题** → 两个手指由 `fp3_gripper_controller` 用相同命令同步驱动，与物理引擎无关；确认 URDF 已删除 `<mimic>` 标签且两个手指都有 command_interface（见坑 5）
 5. **xacro 报错** → 单独跑 `xacro panda.urdf.xacro` 检查语法

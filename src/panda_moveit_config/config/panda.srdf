@@ -21,6 +21,9 @@
     <group name="gripper">
         <joint name="fp3_finger_joint1"/>
     </group>
+    <!--MIMIC JOINT: finger_joint2 跟随 finger_joint1（物理层由控制器同步驱动两指，
+        此处声明让 MoveIt 保持 1-DOF 规划并在轨迹中自动展开 finger_joint2）-->
+    <mimic_joint joint="fp3_finger_joint2" mimic_joint="fp3_finger_joint1" multiplier="1.0" offset="0.0"/>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="hand" parent_link="fp3_hand" group="gripper"/>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->

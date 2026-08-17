@@ -90,7 +90,7 @@ Panda 机械臂 Pick & Place 仿真项目 — 进度总结
 9. 场景搭建 ✓
    - grasp_world.sdf：地面 + 2m×2m×0.1m 桌面 + 3cm 绿色方块
    - 机械臂 spawn 在桌面 z=0.10m 处
-   - bullet-featherstone 物理引擎（mimic 警告可忽略）
+   - bullet-featherstone 物理引擎（当时把 mimic 报错当噪音忽略了，2026-08-17 查明这正是夹爪只动一边的根因，见文末补充日志）
 
 10. 文档沉淀 ✓
     - 踩坑总结_Panda_Gazebo.md（Gazebo 搭建全流程踩坑）
@@ -259,3 +259,29 @@ def main():
 查看 TF：
   ros2 run tf2_ros tf2_echo world base
   ros2 run tf2_tools view_frames
+
+---
+
+## 2026-08-17 补充：夹爪单指运动问题修复
+
+**问题**：`hand_grasp_test` 只动一边手指。排查确认 Gazebo Harmonic（Jazzy vendor 包）
+**不执行 URDF mimic 约束**（服务器日志：[Err] [Physics.cc:1808] ... does not support mimic
+constraints），`fp3_finger_joint2` 是无约束自由关节。之前日志里"mimic 警告可忽略"的判断是错的，
+那个警告正是根因。
+
+**修复**：物理层放弃 mimic，由 `fp3_gripper_controller` 双指同步驱动；MoveIt 层用 SRDF
+`<mimic_joint>` 保持 1-DOF 规划语义。涉及文件：
+- `franka_description/end_effectors/common/franka_hand.xacro`（删 `<mimic>`）
+- `panda_grasp_sim/urdf/panda.urdf.xacro`（finger_joint2 加 command/state 接口）
+- `panda_grasp_sim/config/panda_controllers.yaml`（双指 + gains + allow_partial_joints_goal）
+- `panda_moveit_config/config/panda.srdf`（声明 mimic_joint）
+- `hand_grasp_test.py` / `pick_place_full.py`（轨迹含双指）
+
+另：物体滑落问题的主因就是夹爪只有一边在动。详见
+[`docs/夹爪单指运动问题修复记录.md`](夹爪单指运动问题修复记录.md)。
+
+**验证结果（2026-08-17 晚）**：
+- `hand_grasp_test` 全程双指同步（close: 0.04→0.0 双指一致；open: 0.0→0.04 双指一致）✓
+- `pick_place_full` 端到端抓取成功：物块从桌面 (z=0.115) 被双指夹起悬空 (z=0.212) ✓
+- 排查中曾遇到一次 finger2 完全卡死（JTC 输出正常但物理层不响应），重启仿真后
+  消失且无法复现，判定为旧仿真进程残留导致的一次性事件（见修复记录第五节）。

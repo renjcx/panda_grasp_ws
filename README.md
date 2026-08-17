@@ -210,11 +210,11 @@ ros2 action send_goal /fp3_arm_controller/follow_joint_trajectory \
     points: [ { positions: [0.0, -0.785, 0.0, -2.356, 0.0, 1.57, 0.785],
       time_from_start: { sec: 3, nanosec: 0 } } ] } }"
 
-# 夹爪闭合（0.0m）/ 张开（0.04m）
+# 夹爪闭合（0.0m）/ 张开（0.04m）—— 两个手指都要写
 ros2 action send_goal /fp3_gripper_controller/follow_joint_trajectory \
   control_msgs/action/FollowJointTrajectory \
-  "{ trajectory: { joint_names: ['fp3_finger_joint1'],
-    points: [ { positions: [0.0], time_from_start: { sec: 1, nanosec: 0 } } ] } }"
+  "{ trajectory: { joint_names: ['fp3_finger_joint1', 'fp3_finger_joint2'],
+    points: [ { positions: [0.0, 0.0], time_from_start: { sec: 1, nanosec: 0 } } ] } }"
 ```
 
 ---
@@ -224,7 +224,7 @@ ros2 action send_goal /fp3_gripper_controller/follow_joint_trajectory \
 ```
 panda_grasp_ws/
 ├── src/
-│   ├── franka_description/         # 上游库：Franka 机器人 URDF / 模型 / 参数
+│   ├── franka_description/         # 上游库（已并入本仓库）：Franka 机器人 URDF / 模型 / 参数
 │   │   ├── robots/fp3/             # Panda fp3 配置（关节限位 / 运动学 / 惯量）
 │   │   ├── robots/common/          # 公共 xacro 宏
 │   │   ├── end_effectors/          # 末端执行器（Franka Hand / Cobot Pump）
@@ -325,7 +325,7 @@ Gazebo 世界（`grasp_world.sdf`）包含：
 | 地面 | 10 × 10 m |
 | 桌子 | 2 × 2 × 0.1 m，中心 x = 0.5 |
 | 抓取物块 | 3 cm 绿色方块，x = 0.6，z = 0.115，质量 20 g |
-| 物理引擎 | Bullet-featherstone（mimic 关节必需） |
+| 物理引擎 | Bullet-featherstone |
 
 ---
 
@@ -371,16 +371,13 @@ Gazebo 世界（`grasp_world.sdf`）包含：
 
 ## 已知问题
 
-> ⚠️ 机械臂能到达目标位置并闭合夹爪，但**物体滑落无法升高**。
-> 偶尔绿色方块会**从仿真中消失**。这些是物理 / 抓取稳定性问题，正在排查中。
+> 📌 2026-08-17 更新：查明物体滑落的主因是 **Gazebo 不执行 URDF mimic 约束，夹爪只有一个手指在动**，物块根本夹不住。已改为控制器双指同步驱动（见 [`docs/夹爪单指运动问题修复记录.md`](docs/夹爪单指运动问题修复记录.md)），
+> **端到端实测：`pick_place_full` 成功将 3cm 物块从桌面 (z=0.115) 夹起并悬停空中 (z=0.212)**。
 
 | 问题 | 疑似原因 | 状态 |
 |------|---------|------|
-| 物体从夹爪滑落 | `grasp_world.sdf` 摩擦参数不足；夹爪未建模力控 | 🔴 待修复 |
+| 物体从夹爪滑落 | 夹爪只动一边（mimic 失效）→ 已改为双指同步驱动并实测抓取成功 | ✅ 已修复 |
 | 绿色方块消失 | 过轻物体（20g）在 Bullet-featherstone 物理引擎下不稳定 | 🔴 待修复 |
-
-这两个问题**不是**运动规划 / 控制管线的代码 bug——机械臂已能成功规划并执行轨迹到达抓取位姿。
-剩余的是物理仿真层面的抓取稳定性问题。
 
 ---
 
@@ -407,7 +404,7 @@ Gazebo 世界（`grasp_world.sdf`）包含：
 | `move_group` 报错退出 | 参数或依赖缺失 | 查看终端红色 ERROR 行 |
 | RViz Plan 失败 | `joint_states` 未发布或时钟同步问题 | [排查手册](docs/debugging_handbook.md) 第 5 级 |
 | Plan 成功但机械臂不动 | 轨迹未送到控制器 | [排查手册](docs/debugging_handbook.md) 第 6 级 |
-| 夹爪命令无效 | 控制器未加载或 mimic 冲突 | [排查手册](docs/debugging_handbook.md) 第 2/4 级 |
+| 夹爪命令无效 | 控制器未加载，或轨迹缺少 `fp3_finger_joint2` | [排查手册](docs/debugging_handbook.md) 第 2/4 级 |
 
 ### 常用诊断命令
 

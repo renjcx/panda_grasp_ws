@@ -23,10 +23,12 @@ ARM_JOINTS = ["fp3_joint1", "fp3_joint2", "fp3_joint3",
 def build_gripper_trajectory(open_or_close:str):
     #"构造夹爪轨迹"
     jt = JointTrajectory()
-    jt.joint_names = ["fp3_finger_joint1"]
+    # 两个手指由控制器同步驱动（Gazebo 不执行 URDF mimic 约束）
+    jt.joint_names = ["fp3_finger_joint1", "fp3_finger_joint2"]
 
     point = JointTrajectoryPoint()
-    point.positions = [0.04 if open_or_close == "open" else 0.0]
+    pos = 0.04 if open_or_close == "open" else 0.0
+    point.positions = [pos, pos]
     point.time_from_start = builtin_interfaces.msg.Duration(sec=1, nanosec=0)#1秒完成闭合
     jt.points = [point]
     return jt
