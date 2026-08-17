@@ -259,11 +259,11 @@ panda_grasp_ws/
 │       └── launch/
 │
 ├── docs/
-│   ├── project_overview.md          # 六阶段全流程概览
+│   ├── 项目全流程概览.md          # 六阶段全流程概览
 │   ├── 夹爪单指运动问题修复记录.md   # 单指 bug 排查与修复（mimic）
-│   ├── launch_file_guide.md         # Launch 文件架构详解
-│   ├── gazebo_troubleshooting.md    # Gazebo 仿真踩坑记录
-│   ├── moveitpy_bug_fixes.md        # MoveItPy Bug 修复总结
+│   ├── Launch文件详解.md         # Launch 文件架构详解
+│   ├── Gazebo踩坑总结.md    # Gazebo 仿真踩坑记录
+│   ├── MoveItPy_Bug修复总结.md        # MoveItPy Bug 修复总结
 │   └── panda_moveit_config生成指南.md # MoveIt 配置包生成流程
 │
 ├── README.md
@@ -385,15 +385,15 @@ Gazebo 世界（`grasp_world.sdf`）包含：
 ## Jazzy 兼容性修复
 
 本项目在搭建过程中发现并解决了 **3 个 MoveItPy 兼容性 bug**（详见
-[`docs/moveitpy_bug_fixes.md`](docs/moveitpy_bug_fixes.md)）和 **1 个 Gazebo 资源路径问题**
-（详见 [`docs/gazebo_troubleshooting.md`](docs/gazebo_troubleshooting.md) 坑 3）。简要汇总：
+[`docs/MoveItPy_Bug修复总结.md`](docs/MoveItPy_Bug修复总结.md)）和 **1 个 Gazebo 资源路径问题**
+（详见 [`docs/Gazebo踩坑总结.md`](docs/Gazebo踩坑总结.md) 坑 3）。简要汇总：
 
 | # | 问题 | 修复方式 | 参考 |
 |---|------|---------|------|
-| 1 | `MoveItPy` 构造函数不接受 `parameter_namespace` | 改用 `config_dict` 从 `MoveItConfigsBuilder` 传入完整配置 | `moveitpy_bug_fixes.md` 问题 1 |
-| 2 | `planning_pipelines` 参数名不匹配（Jazzy Bug） | 重命名为 `planning_pipelines.pipeline_names` + 补 `namespace` | `moveitpy_bug_fixes.md` 问题 2 |
-| 3 | 仿真时间下轨迹执行失败：`set_start_state_to_current_state()` 失效、`moveit.execute()` 返回 ABORTED | 手动订阅 `/joint_states` 构造 `RobotState`；绕过 `TrajectoryExecutionManager`，用 `ActionClient` 直接发轨迹 | `moveitpy_bug_fixes.md` 问题 3 |
-| 4 | Gazebo 找不到 workspace 中的 mesh 文件 | launch 文件中设置 `GZ_SIM_RESOURCE_PATH` 包含本地 `install/` 路径 | `gazebo_troubleshooting.md` 坑 3 |
+| 1 | `MoveItPy` 构造函数不接受 `parameter_namespace` | 改用 `config_dict` 从 `MoveItConfigsBuilder` 传入完整配置 | `MoveItPy_Bug修复总结.md` 问题 1 |
+| 2 | `planning_pipelines` 参数名不匹配（Jazzy Bug） | 重命名为 `planning_pipelines.pipeline_names` + 补 `namespace` | `MoveItPy_Bug修复总结.md` 问题 2 |
+| 3 | 仿真时间下轨迹执行失败：`set_start_state_to_current_state()` 失效、`moveit.execute()` 返回 ABORTED | 手动订阅 `/joint_states` 构造 `RobotState`；绕过 `TrajectoryExecutionManager`，用 `ActionClient` 直接发轨迹 | `MoveItPy_Bug修复总结.md` 问题 3 |
+| 4 | Gazebo 找不到 workspace 中的 mesh 文件 | launch 文件中设置 `GZ_SIM_RESOURCE_PATH` 包含本地 `install/` 路径 | `Gazebo踩坑总结.md` 坑 3 |
 
 ---
 
@@ -401,10 +401,10 @@ Gazebo 世界（`grasp_world.sdf`）包含：
 
 | 现象 | 原因 | 参考 |
 |------|------|------|
-| Gazebo 白屏 | GPU / 显卡驱动问题，或 mesh 文件找不到 | [踩坑总结](docs/gazebo_troubleshooting.md) 坑 3 |
+| Gazebo 白屏 | GPU / 显卡驱动问题，或 mesh 文件找不到 | [踩坑总结](docs/Gazebo踩坑总结.md) 坑 3 |
 | `move_group` 报错退出 | 参数或依赖缺失 | 查看终端红色 ERROR 行 |
-| RViz Plan 失败 | `joint_states` 未发布或时钟同步问题 | [踩坑总结](docs/gazebo_troubleshooting.md) 坑 6 |
-| Plan 成功但机械臂不动 | 轨迹未送到控制器 | [MoveItPy Bug 修复](docs/moveitpy_bug_fixes.md) 问题 3 |
+| RViz Plan 失败 | `joint_states` 未发布或时钟同步问题 | [踩坑总结](docs/Gazebo踩坑总结.md) 坑 6 |
+| Plan 成功但机械臂不动 | 轨迹未送到控制器 | [MoveItPy Bug 修复](docs/MoveItPy_Bug修复总结.md) 问题 3 |
 | 夹爪命令无效 | 控制器未加载，或轨迹缺少 `fp3_finger_joint2` | [夹爪修复记录](docs/夹爪单指运动问题修复记录.md) |
 
 ### 常用诊断命令
@@ -423,11 +423,11 @@ ros2 topic echo /tf --once              # TF 树快照
 
 ## 相关文档
 
-- [`docs/project_overview.md`](docs/project_overview.md) — 六阶段全流程概览
+- [`docs/项目全流程概览.md`](docs/项目全流程概览.md) — 六阶段全流程概览
 - [`docs/夹爪单指运动问题修复记录.md`](docs/夹爪单指运动问题修复记录.md) — 夹爪单指 bug 完整排查与修复记录
-- [`docs/launch_file_guide.md`](docs/launch_file_guide.md) — Launch 文件架构详解（启动时序、数据流）
-- [`docs/gazebo_troubleshooting.md`](docs/gazebo_troubleshooting.md) — Gazebo 仿真常见踩坑与解决方案
-- [`docs/moveitpy_bug_fixes.md`](docs/moveitpy_bug_fixes.md) — MoveItPy 三个核心 Bug 及修复
+- [`docs/Launch文件详解.md`](docs/Launch文件详解.md) — Launch 文件架构详解（启动时序、数据流）
+- [`docs/Gazebo踩坑总结.md`](docs/Gazebo踩坑总结.md) — Gazebo 仿真常见踩坑与解决方案
+- [`docs/MoveItPy_Bug修复总结.md`](docs/MoveItPy_Bug修复总结.md) — MoveItPy 三个核心 Bug 及修复
 - [`docs/panda_moveit_config生成指南.md`](docs/panda_moveit_config生成指南.md) — 用 MoveIt Setup Assistant 从零生成 panda_moveit_config 包
 
 ---

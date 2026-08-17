@@ -130,7 +130,7 @@ delayed_controller_spawner = TimerAction(period=6.0, actions=[controller_spawner
 #   T+3s:  Gazebo 就绪了，才能 spawn 机器人
 #   T+6s:  机器人 spawn 后 controller_manager 才存在，才能加载控制器
 
-> 这个时序问题的踩坑记录见 [`gazebo_troubleshooting.md`](gazebo_troubleshooting.md) 坑 6。
+> 这个时序问题的踩坑记录见 [`Gazebo踩坑总结.md`](Gazebo踩坑总结.md) 坑 6。
 
 
 ================================================================

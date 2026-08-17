@@ -33,7 +33,7 @@
     <!--
         5. ros2_control 硬件接口配置
            注意：两个手指关节都声明 command_interface，由控制器同步驱动。
-           Gazebo Harmonic 不执行 URDF mimic 约束（见 docs/gazebo_troubleshooting.md 坑 5），
+           Gazebo Harmonic 不执行 URDF mimic 约束（见 docs/Gazebo踩坑总结.md 坑 5），
            MoveIt 侧通过在 panda.srdf 中声明 mimic_joint 保持 1-DOF 规划语义。
     -->
     <ros2_control name="PandaSimSystem" type="system">

@@ -134,7 +134,7 @@ T+3s:  等待 Gazebo 就绪 → spawn 机器人
 T+6s:  等待 controller_manager 就绪 → 加载控制器
 ```
 
-> launch 时序的逐段讲解见 [`launch_file_guide.md`](launch_file_guide.md)。
+> launch 时序的逐段讲解见 [`Launch文件详解.md`](Launch文件详解.md)。
 
 ## 三、架构速览 — 关键概念
 

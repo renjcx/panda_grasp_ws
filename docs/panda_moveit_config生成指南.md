@@ -10,7 +10,7 @@
 - 它由图形化向导 **MoveIt Setup Assistant (MISA)** 自动生成，生成骨架 = URDF 快照 + `panda.srdf` + 各种 yaml + 8 个 launch 模板 + CMakeLists。
 - 生成后日常只需"改参数回答问题"：数值类修改直接编辑 yaml，SRDF 语义类修改（mimic、碰撞矩阵）直接编辑 `panda.srdf`，**只有机器人结构变了才需要重新生成**。
 
-> 项目整体架构与各文件职责见 [`project_overview.md`](project_overview.md)。
+> 项目整体架构与各文件职责见 [`项目全流程概览.md`](项目全流程概览.md)。
 
 ### 两个启动命令，别搞混（鸡生蛋问题）
 
