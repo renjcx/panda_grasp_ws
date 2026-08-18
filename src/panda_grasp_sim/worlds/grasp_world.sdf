@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <sdf version="1.10">
   <world name="grasp_world">
-    <!-- 使用 Bullet-Featherstone 物理引擎，支持 mimic 关节 -->
+    <!-- 物理引擎：bullet-featherstone（曾按"支持 mimic"的预期选用；实测当前软件栈无引擎可用 mimic，见 docs/夹爪单指运动问题修复记录.md，引擎保留即可）-->
     <physics name="1ms" type="bullet-featherstone">
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1.0</real_time_factor>

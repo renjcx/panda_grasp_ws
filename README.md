@@ -429,6 +429,7 @@ ros2 topic echo /tf --once              # TF 树快照
 - [`docs/Gazebo踩坑总结.md`](docs/Gazebo踩坑总结.md) — Gazebo 仿真常见踩坑与解决方案
 - [`docs/MoveItPy_Bug修复总结.md`](docs/MoveItPy_Bug修复总结.md) — MoveItPy 三个核心 Bug 及修复
 - [`docs/panda_moveit_config生成指南.md`](docs/panda_moveit_config生成指南.md) — 用 MoveIt Setup Assistant 从零生成 panda_moveit_config 包
+- [`docs/物理参数与夹爪力控.md`](docs/物理参数与夹爪力控.md) — 物理引擎/世界参数解读，位置控制 vs 力控（夹轻物难题的机理与出路）
 
 ---
 
